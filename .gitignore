@@ -1,3 +1,23 @@
+#
+# .gitignore
+#
+
+## BACKUP & TEMPORARY FILES ##
+
+*~
+*.bak
+*.tmp
+
+
+## PYTHON ##
+
+**/__pycache__/
+*.pyc
+
+
+## MISC ##
+
+*.json
 
 
 # Created by https://www.gitignore.io/api/pycharm
