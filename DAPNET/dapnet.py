@@ -1,3 +1,5 @@
+import os
+import sys
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -55,9 +57,9 @@ class DAPNET():
         """
         Set the DAPNET credentials
 
-        :param user:
-        :param passwd:
-        :return:
+        :param user: The usename used to log into the DAPNET server
+        :param passwd: The password used to access the DAPNET API
+        :return: The DAPNET credentials, as an HTTPBasicAuth object
         """
         self.dapnet_user = user
         self.dapnet_pass = passwd
@@ -75,6 +77,9 @@ class DAPNET():
     def set_tx_group(self, txgroup: str):
         self.dapnet_txgroup = txgroup
 
+    def set_tx_group_from_env(self):
+        self.dapnet_txgroup = os.getenv('DAPNET_TXGROUP')
+
     def set_destination_callsign(self, callsign):
         self.dapnet_dest_callsign = callsign
 
@@ -82,12 +87,27 @@ class DAPNET():
         self.dapnet_emergency = is_emergency
 
     def send_page(self, callsign: str, contents: str):
+        """
+        Send a single page over the DAPNET network, using the HTTP API
+
+        :param callsign: The callsign that should receive the page
+        :param contents: The contents of the page
+        :return: The response from the DAPNET API
+        """
         self.dapnet_dest_callsign = callsign
         json_string = json.dumps(
-            {"text": contents, "callSignNames": self.dapnet_dest_callsign, "transmitterGroupNames": [self.dapnet_txgroup], "emergency": self.dapnet_emergency})
+            {
+                "text": contents,
+                "callSignNames": self.dapnet_dest_callsign,
+                "transmitterGroupNames": [
+                    self.dapnet_txgroup
+                ],
+                "emergency": self.dapnet_emergency
+            }
+        )
         pprint.pprint(json_string)
 
-        response = requests.post(url, data=json_string, auth=self.dapnet_auth)  # Exception handling einbauen
+        response = requests.post(self.dapnet_url, data=json_string, auth=self.dapnet_auth)  # Exception handling einbauen
 
         return response.status_code
 
