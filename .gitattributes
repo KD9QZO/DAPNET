@@ -1,0 +1,21 @@
+#
+# .gitattributes
+#
+
+## GENERIC ##
+
+*				text=auto
+
+
+## SOURCE FILES ##
+
+*.py			eol=lf diff=python
+
+
+
+## TEXT & MARKUP FILES ##
+
+*.txt			eol=crlf
+*.md			eol=crlf diff=markdown
+*.mkdn			eol=crlf diff=markdown
+*.markdown		eol=crlf diff=markdown
